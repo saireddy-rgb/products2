@@ -10,14 +10,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     @Autowired
-      private ProductsRepo productsRepo;
+    private ProductsRepo productsRepo;
 
     @Override
     public Products addProducts(Products products) {
-        return  productsRepo.save(products);
+        return productsRepo.save(products);
     }
 
     @Override
@@ -28,17 +28,16 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public Products getProductById(long prodId) {
         Optional<Products> products = productsRepo.findById(prodId);
-        if(products.isPresent()){
+        if (products.isPresent()) {
             return products.get();
-        }
-        else {
+        } else {
             throw new RuntimeException();
         }
     }
 
     @Override
     public Products updateProduct(Products products, long prodId) {
-        Products existingProduct = productsRepo.findById(prodId).orElseThrow(()-> new RuntimeException());
+        Products existingProduct = productsRepo.findById(prodId).orElseThrow(() -> new RuntimeException());
         existingProduct.setPrice(products.getPrice());
         existingProduct.setProdName(products.getProdName());
         productsRepo.save(existingProduct);
@@ -46,7 +45,8 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public Void deleteProduct(long prodId) {
-        return null;
+    public void deleteProduct(long prodId) {
+        productsRepo.findById(prodId).orElseThrow(() -> new RuntimeException());
+        productsRepo.deleteById(prodId);
     }
 }
